@@ -160,7 +160,7 @@ A jQuery plugin is also provided. Tested with jQuery v1.11.0, no idea about 2.x 
 
     ```javascript
     $(document).ready(function() {
-    $('#bus-map').kuopioBussify();
+        $('#bus-map').kuopioBussify();
     });
     ```
 
