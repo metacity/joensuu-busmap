@@ -1,0 +1,21 @@
+html, body {
+	background-color: #cccccc;
+}
+
+.container {
+	background-color: #ffffff;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	-webkit-box-shadow: 2px 1px 3px 0px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow:    2px 1px 3px 0px rgba(50, 50, 50, 0.75);
+	box-shadow:         2px 1px 3px 0px rgba(50, 50, 50, 0.75);
+}
+
+#map {
+	width: 100%;
+	min-height: 700px;
+	padding: 20px;
+	margin-bottom: 20px;
+	border: 1px solid #d4d4d4;
+}

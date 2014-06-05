@@ -1,0 +1,81 @@
+<?php
+
+require('init.php');
+
+define("LINES_API_URL", "https://bussit.kuopio.fi/bussit/web?command=stops&action=routes");
+define("ROUTES_API_URL", "https://bussit.kuopio.fi/bussit/web?command=routes&action=by_line&format=json&line=");
+define("ROUTESTOPS_API_URL", "https://bussit.kuopio.fi/bussit/web?command=olmap&action=getRouteStops&route=");
+
+createTables($pdo);
+fetchAndPopulateRoutes($pdo);
+
+function createTables($pdo) {
+	$buslinesCreated = $pdo->prepare('CREATE TABLE kuopio_buslines(
+		id INT PRIMARY KEY AUTO_INCREMENT,
+		line VARCHAR(15) NOT NULL,
+		name VARCHAR(50)
+		)')->execute();
+
+	$routesCreated = $pdo->prepare('CREATE TABLE kuopio_busline_routes(
+		id INT PRIMARY KEY AUTO_INCREMENT,
+		name VARCHAR(255) NOT NULL,
+		line_id INT NOT NULL,
+		FOREIGN KEY(line_id) REFERENCES kuopio_buslines(id) ON DELETE CASCADE
+		)')->execute();
+
+	$routeStopsCreated = $pdo->prepare('CREATE TABLE kuopio_busline_routestops(
+		id INT PRIMARY KEY AUTO_INCREMENT,
+		name VARCHAR(255) NOT NULL,
+		lat FLOAT NOT NULL,
+		lon FLOAT NOT NULL,
+		route_order INT NOT NULL,
+		route_id INT NOT NULL,
+		FOREIGN KEY(route_id) REFERENCES kuopio_busline_routes(id) ON DELETE CASCADE
+		)')->execute();
+
+	if ($buslinesCreated && $routesCreated && $routeStopsCreated) {
+		echo "Tables created successfully!\n";
+	} else {
+		die("Could not create all tables!\n");
+	}
+}
+
+function fetchAndPopulateRoutes($pdo) {
+	$insertLineStmt = $pdo->prepare("INSERT INTO kuopio_buslines (line, name) VALUES (?, ?)");
+	$insertRouteStmt = $pdo->prepare("INSERT INTO kuopio_busline_routes (name, line_id) VALUES (?, ?)");
+	$insertRouteStopStmt = $pdo->prepare("INSERT INTO kuopio_busline_routestops (name, lat, lon, route_order, route_id) VALUES (?, ?, ?, ?, ?)");
+
+	// Monster loop, cba to refactor..
+	$busLines = json_decode(file_get_contents(LINES_API_URL), true);
+	foreach ($busLines as $line) {
+		if (!empty($line["line"])) {
+			$lineParams = array($line["line"], $line["name"]);
+			if ($insertLineStmt->execute($lineParams)) {
+				$lineRowId = $pdo->lastInsertId();
+				$routes = json_decode(file_get_contents(ROUTES_API_URL . $line["id"]), true);
+				foreach ($routes as $route) {
+					$routeParams = array($route["name"], $lineRowId);
+					if ($insertRouteStmt->execute($routeParams)) {
+						$routeRowId = $pdo->lastInsertId();
+						$routeStops = json_decode(file_get_contents(ROUTESTOPS_API_URL . $route["id"]), true);
+						foreach ($routeStops as $stop) {
+							$stopParams = array($stop["name"], $stop["lat"], $stop["lon"], $stop["order"], $routeRowId);
+							if ($insertRouteStopStmt->execute($stopParams)) {
+
+							} else {
+								die(print_r($pdo->errorInfo()));
+							}
+						}
+					} else {
+						die(print_r($pdo->errorInfo()));
+					}
+				}
+			} else {
+				die(print_r($pdo->errorInfo()));
+			}
+		}
+	}
+	echo "Lines, routes and route stops downloaded and saved successfully!\n";
+}
+
+?>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Kuopio Bus Map demo</title>
+        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://bootflat.github.io/bootflat/css/bootflat.css">
+		<link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+		<div class="container">
+			<div class="row text-center">
+				<h1>Kuopio Bus Map Demo</h1>
+				<p>See <a href="https://github.com/metacity/kuopio-busmap">https://github.com/metacity/kuopio-busmap</a> for user guide.</p>
+			</div>
+			<div class="row">
+				<div id="busline-list" class="col-md-2">
+
+				</div>
+				<div class="col-md-10">
+					<div id="map">
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+        <!-- Bootstrap -->
+        <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+        <!-- Bootflat's JS files.-->
+        <script src="https://bootflat.github.io/bootflat/js/icheck.min.js"></script>
+
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+		<script src="kuopio-busmap-jquery.js"></script>
+
+		<script>
+			$(document).ready(function() {
+				$.getJSON("lines.php", function(lines) {
+					var routesHtml = "";
+					var routes = [];
+					$.each(lines, function(idx, line) {
+						routesHtml += '<label><div class="icheckbox"><input type="checkbox"></div>' + line.line + "</label><br>";
+						routes = routes.concat(line.routes);
+					})
+					$('#busline-list').html(routesHtml);
+					$('#map').kuopioBussify({routes: routes, markers: false});
+				});
+			});
+		</script>
+    </body>
+</html>
