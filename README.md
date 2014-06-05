@@ -159,7 +159,9 @@ A jQuery plugin is also provided. Tested with jQuery v1.11.0, no idea about 2.x 
 * Use the plugin on jQuery Objects [after the DOM has loaded](http://learn.jquery.com/using-jquery-core/document-ready/). For example
 
     ```javascript
+    $(document).ready(function() {
     $('#bus-map').kuopioBussify();
+    });
     ```
 
 ### Options
