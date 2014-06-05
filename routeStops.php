@@ -1,12 +1,13 @@
 <?php
 
-require('init.php');
+require("init.php");
 
-header('Content-Type: application/json; charset=utf-8');
+header("Content-Type: application/json; charset=utf-8");
 routeStopsJSON($pdo, $_GET["route_id"]);
 
 function routeStopsJSON($pdo, $route_id) {
-	$fetchRouteStops = $pdo->prepare("SELECT name, lat, lon, route_order FROM kuopio_busline_routestops WHERE route_id = ? ORDER BY route_order ASC");
+	$fetchRouteStops = $pdo->prepare("SELECT name, lat, lon, route_order 
+		FROM " . ROUTESTOPS_TABLE ." WHERE route_id = ? ORDER BY route_order ASC");
 	$fetchRouteStops->bindParam(1, $route_id);
 	if ($fetchRouteStops->execute()) {
 		$routeStops = $fetchRouteStops->fetchAll(PDO::FETCH_ASSOC);

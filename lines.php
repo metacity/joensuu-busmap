@@ -1,13 +1,13 @@
 <?php
 
-require('init.php');
+require("init.php");
 
-header('Content-Type: application/json; charset=utf-8');
+header("Content-Type: application/json; charset=utf-8");
 allLinesJSON($pdo);
 
 function allLinesJSON($pdo) {
-	$fetchLines = $pdo->prepare("SELECT * FROM kuopio_buslines");
-	$fetchRoutes = $pdo->prepare("SELECT id, name FROM kuopio_busline_routes WHERE line_id = ?");
+	$fetchLines = $pdo->prepare("SELECT * FROM " . LINES_TABLE);
+	$fetchRoutes = $pdo->prepare("SELECT id, name FROM " . ROUTES_TABLE . " WHERE line_id = ?");
 
 	if ($fetchLines->execute()) {
 		$busLines = $fetchLines->fetchAll(PDO::FETCH_ASSOC);
