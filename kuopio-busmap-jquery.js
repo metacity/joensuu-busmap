@@ -5,8 +5,9 @@
 		var settings = $.extend({
 			routes: [{id: 18}, {id: 126}],
 			zoom: 12,
-			center: new google.maps.LatLng(62.860813, 27.6496627),
-			markers: true
+			center: new google.maps.LatLng(62.8816551, 27.6579654),
+			markers: true,
+			apiEndPoint: "routeStops.php"
 		}, options);
 
 		// Init the map
@@ -19,7 +20,7 @@
 
 		// Fetch route waypoints for each given route
 		$.each(settings.routes, function(index, route) {
-			$.getJSON("routeStops.php?route_id=" + route.id, function(wayPoints) {
+			$.getJSON(settings.apiEndPoint + "?route_id=" + route.id, function(wayPoints) {
 				generatePolylineAndMarkers(wayPoints, route.id);
 			});
 		});
