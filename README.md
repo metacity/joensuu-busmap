@@ -19,7 +19,7 @@ The API consists of two endpoints: `lines.php` and `routeStops.php`. Both accept
 
 ### lines.php
 
-`lines.php` gives you a list of available bus lines and their routes, and it is of the most simple kind: a simple HTTP GET request will return a JSON array describing different lines and their possible routes. The response is an array of the following JSON objects:
+`lines.php` gives you a list of available bus lines and their routes, and it is of the most simple kind: a simple HTTP GET request will return a JSON array describing different lines and their possible routes. The response is an array of the following JSON objects (bus lines):
 
 | Field       | Type      | Optional | Example value |
 | ----------- | --------- | -------- | ------------- |
@@ -30,7 +30,7 @@ The API consists of two endpoints: `lines.php` and `routeStops.php`. Both accept
 
 > Note: Usually `line` and `name` are the same, but this isn't confirmed. Additionally, `routes` is propably never absent, but this isn't 100% sure either.
 
-The `routes` field will be an array of the following JSON objects: 
+The `routes` field will be an array of the following JSON objects (routes): 
 
 | Field       | Type      | Optional | Example value                 |
 | ----------- | --------- | -------- | ----------------------------- |
@@ -102,7 +102,7 @@ An example response to an HTTP GET request to `http://server.com/lines.php` coul
 
 ### routeStops.php
 
-`routeStops.php` will return an ordered list (array) of way points for a given route ID (emphasized earlier). **The route ID is given as a query parameter `route_id`**. So the HTTP GET request will be made to  `routeStops.php?route_id=113`, for example. The returned JSON array will consist of the following JSON objects:
+`routeStops.php` will return an ordered list (array) of way points for a given route ID (emphasized earlier). **The route ID is given as a query parameter `route_id`**. So the HTTP GET request will be made to  `routeStops.php?route_id=113`, for example. The returned JSON array will consist of the following JSON objects (route stops):
 
 | Field            | Type              | Optional | Example value   |
 | ---------------- | ----------------- | -------- | --------------- |
