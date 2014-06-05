@@ -149,9 +149,18 @@ An example response to an HTTP GET request to `http://server.com/routeStops.php?
 
 A jQuery plugin is also provided. Tested with jQuery v1.11.0, no idea about 2.x branch. Its usage is super-easy:
 
-* Import Google Maps JavaScript API by adding `<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>` before the closing `</body>` tag. Replace YOUR_API_KEY with your Google API key. See more [here](https://developers.google.com/maps/documentation/javascript/tutorial).
-* Import the jQuery plugin by adding `<script src="path/to/kuopio-busmap-jquery.js"></script>` below the Google Maps JS import.
-* Use the plugin on jQuery Objects [after the DOM has loaded](http://learn.jquery.com/using-jquery-core/document-ready/). For example `$('#bus-map').kuopioBussify();`
+* Import Google Maps JavaScript API and the jQuery plugin by adding the following just before the closing `</body>` tag: 
+
+    ```javascript
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+    <script src="path/to/kuopio-busmap-jquery.js"></script>
+    ```
+    Of course replace YOUR_API_KEY with your Google API key. See more [here](https://developers.google.com/maps/documentation/javascript/tutorial).
+* Use the plugin on jQuery Objects [after the DOM has loaded](http://learn.jquery.com/using-jquery-core/document-ready/). For example
+
+    ```javascript
+    $('#bus-map').kuopioBussify();
+    ```
 
 ### Options
 When using `$('#bus-map').kuopioBussify()`, the plugin uses some sensible defaults (and draws a few sample  routes). The plugin can accept an options object, which will also be passed as [Map Options](https://developers.google.com/maps/documentation/javascript/tutorial#MapOptions) for the Google Map. In addition to what Map Options supports, following options can be provided (default value will be used if the field isn't defined in the options object):
