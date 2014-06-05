@@ -3,8 +3,8 @@
     <head>
         <title>Kuopio Bus Map demo</title>
         <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://bootflat.github.io/bootflat/css/bootflat.css">
-		<link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="css/bootflat.min.css">
+		<link rel="stylesheet" href="css/style.css">
     </head>
 
     <body>
@@ -12,6 +12,7 @@
 			<div class="row text-center">
 				<h1>Kuopio Bus Map Demo</h1>
 				<p>See <a href="https://github.com/metacity/kuopio-busmap">https://github.com/metacity/kuopio-busmap</a> for user guide.</p>
+				
 			</div>
 			<div class="row">
 				<div id="busline-list" class="col-md-2">
@@ -33,21 +34,40 @@
         <script src="https://bootflat.github.io/bootflat/js/icheck.min.js"></script>
 
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
-		<script src="kuopio-busmap-jquery.js"></script>
+		<script src="../kuopio-busmap-jquery.js"></script>
 
 		<script>
+			var allLines = [];
+			var busLineList;
+		
 			$(document).ready(function() {
-				$.getJSON("lines.php", function(lines) {
+				busLineList = $('#busline-list');
+				
+				$.getJSON("../lines.php", function(lines) {
+					allLines = lines;
+
 					var routesHtml = "";
-					var routes = [];
 					$.each(lines, function(idx, line) {
-						routesHtml += '<label><div class="icheckbox"><input type="checkbox"></div>' + line.line + "</label><br>";
-						routes = routes.concat(line.routes);
+						routesHtml += '<p><label><input type="checkbox" name="line-' + line.line + '">' + line.line + '</label><p>';
 					})
-					$('#busline-list').html(routesHtml);
-					$('#map').kuopioBussify({routes: routes, markers: false});
+					busLineList.html(routesHtml);
+					busLineList.find('input').iCheck({checkboxClass: "icheckbox_flat"}).on('ifToggled', function() {
+						showCheckedLines();
+					});
+					showCheckedLines();
 				});
 			});
+			
+			function showCheckedLines() {
+				var enabledRoutes = [];
+				var checkBoxes = $('#busline-list').find('input');
+				for (var i = 0; i < allLines.length; ++i) {
+					if ($(checkBoxes[i]).prop('checked')) {
+						enabledRoutes = enabledRoutes.concat(allLines[i].routes);
+					}
+				}
+				$('#map').kuopioBussify({routes: enabledRoutes, markers: false, apiEndPoint: "../routeStops.php"});
+			}
 		</script>
     </body>
 </html>
