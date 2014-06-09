@@ -2,9 +2,9 @@
 
 require("init.php");
 
-define("LINES_API_URL", "https://bussit.kuopio.fi/bussit/web?command=stops&action=routes");
-define("ROUTES_API_URL", "https://bussit.kuopio.fi/bussit/web?command=routes&action=by_line&format=json&line=");
-define("ROUTESTOPS_API_URL", "https://bussit.kuopio.fi/bussit/web?command=olmap&action=getRouteStops&route=");
+define("LINES_API_URL", "http://bussit.joensuu.fi/bussit/web?command=stops&action=routes");
+define("ROUTES_API_URL", "http://bussit.joensuu.fi/bussit/web?command=routes&action=by_line&format=json&line=");
+define("ROUTESTOPS_API_URL", "http://bussit.joensuu.fi/bussit/web?command=olmap&action=getRouteStops&route=");
 
 createTables($pdo);
 fetchAndPopulateRoutes($pdo);

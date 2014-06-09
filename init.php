@@ -8,9 +8,9 @@ define("DB_USERNAME", "your_db_username");
 define("DB_PASSWORD", "your_db_password");
 
 // Change these values if you want/need to..
-define("LINES_TABLE", "kuopio_buslines");
-define("ROUTES_TABLE", "kuopio_busline_routes");
-define("ROUTESTOPS_TABLE", "kuopio_busline_routestops");
+define("LINES_TABLE", "joensuu_buslines");
+define("ROUTES_TABLE", "joensuu_busline_routes");
+define("ROUTESTOPS_TABLE", "joensuu_busline_routestops");
 
 
 $pdo;

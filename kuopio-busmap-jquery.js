@@ -5,7 +5,7 @@
 		var settings = $.extend({
 			routes: [{id: 18}, {id: 126}],
 			zoom: 12,
-			center: new google.maps.LatLng(62.8816551, 27.6579654),
+			center: new google.maps.LatLng(62.573840, 29.796102),
 			markers: true,
 			apiEndPoint: "routeStops.php"
 		}, options);
