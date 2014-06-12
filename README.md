@@ -1,10 +1,10 @@
-Kuopio Bus Map
+Joensuu Bus Map
 =============
 
-Kuopio bus lines on Google Maps. The package includes a setup script to pull the line data to a database and serve it as JSON, and a jQuery plugin to easily display the map.
+Kuopio bus lines on Google Maps. The package includes a setup script to pull the line data to a database and serve it as JSON, and a JavaScript library to easily display the map.
 
 ## Database and API installation
-This repo includes a setup file `setup.php` that downloads bus line, route and stop information from https://bussit.kuopio.fi and dumps them to a database. Before running it (or any other PHP file here), you need to edit the values in the following lines in the `init.php` file to match your database setup:
+This repo includes a setup file `setup.php` that downloads bus line, route and stop information from http://bussit.joensuu.fi and dumps them to a database. Before running it (or any other PHP file here), you need to edit the values in the following lines in the `init.php` file to match your database setup:
 
 ```
 define("DB_DSN", "mysql:dbname=some_database_name;host=localhost");
@@ -35,7 +35,7 @@ The `routes` field will be an array of the following JSON objects (routes):
 | Field       | Type      | Optional | Example value                 |
 | ----------- | --------- | -------- | ----------------------------- |
 | `id`        | String    | no       | "21"                          | 
-| `name`      | String    | no       | "Neulam�ki-KYS-Tori-Touvitie" |
+| `name`      | String    | no       | "Neulamäki-KYS-Tori-Touvitie" |
 
 **The `id` field of a route is crucial** as it will be used in a query parameter when asking `routeStops.php` for a route's way point coordinates. 
 
@@ -145,56 +145,82 @@ An example response to an HTTP GET request to `http://server.com/routeStops.php?
 ```
 
 
-## jQuery plugin
+## JavaScript library
 
-A jQuery plugin is also provided. Tested with jQuery v1.11.0, no idea about 2.x branch. Its usage is super-easy:
+A small JS helper library is also provided. Is has no external dependencies, other than Google Maps JavaScript API V3. Its usage is super-easy:
 
-* Import Google Maps JavaScript API and the jQuery plugin by adding the following just before the closing `</body>` tag: 
+* Import Google Maps JavaScript API V3 and the JS helper library by adding the following just before the closing `</body>` tag: 
 
     ```javascript
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
-    <script src="path/to/kuopio-busmap-jquery.js"></script>
+    <script src="path/to/joensuu-busmap.js"></script>
     ```
     Of course replace YOUR_API_KEY with your Google API key. See more [here](https://developers.google.com/maps/documentation/javascript/tutorial).
-* Use the plugin on jQuery Objects [after the DOM has loaded](http://learn.jquery.com/using-jquery-core/document-ready/). For example
+* Acquire a `google.maps.Map` instance by following the steps described [here](https://developers.google.com/maps/documentation/javascript/tutorial#google.maps.Map) (*after the DOM has loaded!*).
+* Create a new `JoensuuBusMap` instance by passing your newly acquired `google.maps.Map` instance and an optional options object for the contructor:
 
     ```javascript
-    $(document).ready(function() {
-        $('#bus-map').kuopioBussify();
-    });
+    var joensuuBusMap = new JoensuuBusMap(googleMap);
     ```
+* Use the `drawRoutes(routes)` method to draw the actual routes on the map. The `routes` parameter is an array of object with `id` and `name` properties. For example:
+
+    ```javascript
+    joensuuBusMap.drawRoutes([
+        {
+            id: 35, 
+            name: "Noljakka-Keskusta"
+        },
+        {
+            id: 38, 
+            name: "Askon testi"
+        },
+        {
+            id: 40, 
+            name: "Rantakylä-Keskusta-Noljakka"
+        },
+        {
+            id: 45, 
+            name: "Keskusta-Rantakylä"
+        }
+    ]);
+    ```
+    > **Hint:** As seen before, `lines.php` returns a `routes` array for each bus line, and these arrays can be conveniently passed directly for this method.
 
 ### Options
-When using `$('#bus-map').kuopioBussify()`, the plugin uses some sensible defaults (and draws a few sample  routes). The plugin can accept an options object, which will also be passed as [Map Options](https://developers.google.com/maps/documentation/javascript/tutorial#MapOptions) for the Google Map. In addition to what Map Options supports, following options can be provided (default value will be used if the field isn't defined in the options object):
+When using `new JoensuuBusMap(googleMap)` constructor, the library uses some sensible defaults. Second constructor argument  takes in an options object in which the following options can be provided (default value will be used if the field isn't defined in the options object):
 
-| Field            | Type         | Default value                | Note                                                           |
-| ---------------- | ------------ | ---------------------------- | -------------------------------------------------------------- |
-| `routes`         | array        | `[{id: 18}, {id: 126}]`      | Can be nicely passed with `routes` array from bus line objects | 
-| `zoom`           | Number (int) | 12                           | Default map zoom                                               |
-| `center`         | `google.maps.LatLng` | Center of Kuopio     |                                                                |
-| `markers`        | Boolean      | `true`                       |                                                                |
-| `apiEndPoint`    | String       | "routeStops.php"             | If the API resides in the previous directory or so..           |
-| `markerIcon`     | String       | `undefined` (default marker) | Path to the icon, e.g. `img/marker.png`                        |
+| Field            | Type         | Default value                | Note                                                  |
+| ---------------- | ------------ | ---------------------------- | ----------------------------------------------------- |
+| `showMarkers`    | Boolean      | `true`                       | Behind the scenes, markers are still always generated; this only controls if they are drawn |
+| `apiEndPoint`    | String       | "routeStops.php"             |                                                       |
+| `markerIcon`     | String       | `undefined` (default marker) | Path to the icon, e.g. `img/marker.png`               |
+| `routeColor`     | function     | random pastel color function | Will be called with route ID as the first argument; must return an RGB HEX color string, e.g. #A5FB12
 
-So for example, one could instantiate the map with: 
+So for example, one could instantiate the bus map with: 
 ```javascript
-$('#bus-map').kuopioBussify({
-   routes: [
-      {
-         id: 123
-      },
-      {
-         id: 89
-      },
-      {
-         id: 33
-      }
-   ],
-   markerIcon: 'img/bus_marker.png',
-   apiEndPoint: 'api/wayPoints.php',
-   zoom: 11
+var joensuuBusMap = new JoensuuBusMap(googleMap, {
+    showMarkers: false, 
+    markerIcon: "img/marker.png", 
+    apiEndPoint: "api/wayPoints.php",
+    routeColor: function(routeId) {
+        // Make your own color algorithm here!
+        return "#12AB" + (routeId % 255).toString(16);
+    }
 });
 ```
 
+### Methods
+`JoensuuBusMap` objects have two additional methods to control the map after its instantiation: 
+| Method             | Return          | Description                              |
+| ------------------ | --------------- | ---------------------------------------- |
+| `clear`            | Nothing         | Clears all routes and markers on the map | 
+| `markers(boolean)` | Nothing         | Enables or disables route stop markers   |
+
+```javascript
+joensuuBusMap.clear();         // Clears map
+joensuuBusMap.markers(true);   // Shows markers
+joensuuBusMap.markers(false);  // Hides markers
+```
+
 ## Demo
-A demo site can be found in the folder `demo/` which is also demonstrated at [http://cs.uef.fi/~mikkoks/kuopio-busmap/demo/](http://cs.uef.fi/~mikkoks/kuopio-busmap/demo/).
+A demo site can be found in the folder `demo/` which is also demonstrated at [http://cs.uef.fi/~mikkoks/joensuu-busmap/demo/](http://cs.uef.fi/~mikkoks/joensuu-busmap/demo/). 
