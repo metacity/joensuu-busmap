@@ -55,20 +55,22 @@ function fetchAndPopulateRoutes($pdo) {
 				$lineRowId = $pdo->lastInsertId();
 				$routes = json_decode(file_get_contents(ROUTES_API_URL . $line["id"]), true);
 				foreach ($routes as $route) {
-					$routeParams = array($route["name"], $lineRowId);
-					if ($insertRouteStmt->execute($routeParams)) {
-						$routeRowId = $pdo->lastInsertId();
-						$routeStops = json_decode(file_get_contents(ROUTESTOPS_API_URL . $route["id"]), true);
-						foreach ($routeStops as $stop) {
-							$stopParams = array($stop["name"], $stop["lat"], $stop["lon"], $stop["order"], $routeRowId);
-							if ($insertRouteStopStmt->execute($stopParams)) {
+					if (!empty($route["name"])) {
+						$routeParams = array($route["name"], $lineRowId);
+						if ($insertRouteStmt->execute($routeParams)) {
+							$routeRowId = $pdo->lastInsertId();
+							$routeStops = json_decode(file_get_contents(ROUTESTOPS_API_URL . $route["id"]), true);
+							foreach ($routeStops as $stop) {
+								$stopParams = array($stop["name"], $stop["lat"], $stop["lon"], $stop["order"], $routeRowId);
+								if ($insertRouteStopStmt->execute($stopParams)) {
 
-							} else {
-								die(print_r($pdo->errorInfo()));
+								} else {
+									die(print_r($pdo->errorInfo()));
+								}
 							}
+						} else {
+							die(print_r($pdo->errorInfo()));
 						}
-					} else {
-						die(print_r($pdo->errorInfo()));
 					}
 				}
 			} else {
