@@ -23,3 +23,14 @@ html, body {
 .icheckbox_flat {
 	margin-right: 3px;
 }
+
+.scroller {
+	overflow-y: auto;
+	height: 700px;
+}
+
+.route-tooltip {
+	min-height: 50px !important;
+	min-width: 100px !important;
+    overflow: hidden !important;
+}
