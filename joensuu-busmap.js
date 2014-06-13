@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 function JoensuuBusMap(gmap, options) {
 	this.map = gmap;
