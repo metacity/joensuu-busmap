@@ -1,7 +1,7 @@
-Joensuu Bus Map
+﻿Joensuu Bus Map
 =============
 
-Kuopio bus lines on Google Maps. The package includes a setup script to pull the line data to a database and serve it as JSON, and a JavaScript library to easily display the map.
+Joensuu bus lines on Google Maps. The package includes a setup script to pull the line data to a database and serve it as JSON, and a JavaScript library to easily enhance a Google Map.
 
 ## Database and API installation
 This repo includes a setup file `setup.php` that downloads bus line, route and stop information from http://bussit.joensuu.fi and dumps them to a database. Before running it (or any other PHP file here), you need to edit the values in the following lines in the `init.php` file to match your database setup:
@@ -15,7 +15,7 @@ define("DB_PASSWORD", "your_db_password");
 You can also edit the table name constants below the previous lines if you like or need to. After editing, transfer all the PHP files to a location of your choosing (on a PHP capable server ofc) and navigate to `http://url.to.your/server/setup.php` with your browser. The setup script does not execute HTTP requests in parallel, so loading and dumping the data might take a while -- tens of seconds even. When the setup has completed successfully, the backend is ready: `lines.php` and `routeStops.php` will be your two API endpoints answering to HTTP GET requests with JSON. 
 
 ## API
-The API consists of two endpoints: `lines.php` and `routeStops.php`. Both accept HTTP GET and reply with JSON.
+The API consists of two endpoints: `lines.php` and `routeStops.php`. Both accept HTTP GET (actually any HTTP verb) and reply with JSON.
 
 ### lines.php
 
@@ -211,10 +211,11 @@ var joensuuBusMap = new JoensuuBusMap(googleMap, {
 
 ### Methods
 `JoensuuBusMap` objects have two additional methods to control the map after its instantiation: 
-| Method             | Return          | Description                              |
-| ------------------ | --------------- | ---------------------------------------- |
-| `clear`            | Nothing         | Clears all routes and markers on the map | 
-| `markers(boolean)` | Nothing         | Enables or disables route stop markers   |
+
+| Method             | Return  | Description                              |
+| ------------------ | --------| ---------------------------------------- |
+| `clear`            | Nothing | Clears all routes and markers on the map | 
+| `markers(boolean)` | Nothing | Enables or disables route stop markers   |
 
 ```javascript
 joensuuBusMap.clear();         // Clears map
