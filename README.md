@@ -189,12 +189,12 @@ A small JS helper library is also provided. Is has no external dependencies, oth
 ### Options
 When using `new JoensuuBusMap(googleMap)` constructor, the library uses some sensible defaults. Second constructor argument  takes in an options object in which the following options can be provided (default value will be used if the field isn't defined in the options object):
 
-| Field            | Type         | Default value                | Note                                                  |
-| ---------------- | ------------ | ---------------------------- | ----------------------------------------------------- |
-| `showMarkers`    | Boolean      | `true`                       | Behind the scenes, markers are still always generated; this only controls if they are drawn |
-| `apiEndPoint`    | String       | "routeStops.php"             |                                                       |
-| `markerIcon`     | String       | `undefined` (default marker) | Path to the icon, e.g. `img/marker.png`               |
-| `routeColor`     | function     | random pastel color function | Will be called with route ID as the first argument; must return an RGB HEX color string, e.g. #A5FB12
+| Field            | Type         | Default value                | Note                                                                                                  |
+| ---------------- | ------------ | ---------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `showMarkers`    | Boolean      | `true`                       | Behind the scenes, markers are still always generated; this only controls whether they are drawn      |
+| `apiEndPoint`    | String       | "routeStops.php"             |                                                                                                       |
+| `markerIcon`     | String       | `undefined` (default marker) | Path to the icon, e.g. `img/marker.png`                                                               |
+| `routeColor`     | function     | random pastel color function | Will be called with route ID as the first argument; must return an RGB HEX color string, e.g. #A5FB12 |
 
 So for example, one could instantiate the bus map with: 
 ```javascript
