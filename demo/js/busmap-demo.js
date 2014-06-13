@@ -8,7 +8,6 @@ $(document).ready(function() {
 	busLineList = $('#busline-list');
 	
 	$.getJSON("../lines.php", function(lines) {
-		console.log("loL");
 		allLines = lines;
 
 		// Generate and style the route checkboxes
