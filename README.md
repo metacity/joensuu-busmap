@@ -152,7 +152,7 @@ A small JS helper library is also provided. Is has no external dependencies, oth
 * Import Google Maps JavaScript API V3 and the JS helper library by adding the following just before the closing `</body>` tag: 
 
     ```javascript
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
     <script src="path/to/joensuu-busmap.js"></script>
     ```
     Of course replace YOUR_API_KEY with your Google API key. See more [here](https://developers.google.com/maps/documentation/javascript/tutorial).
