@@ -1,6 +1,7 @@
-<!doctype html>
-<html>
+﻿<!doctype html>
+<html lang="en">
 	<head>
+		<meta charset="utf-8">
 		<title>Joensuu Bus Map demo</title>
 		<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 		<link rel="stylesheet" href="css/bootflat.min.css">
@@ -34,63 +35,13 @@
 		<!-- Bootflat's JS files.-->
 		<script src="https://bootflat.github.io/bootflat/js/icheck.min.js"></script>
 
-		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsBgvJq2xlk1o3zZxW9rI074kaq1nZl7I"></script>
+		<!-- Google Maps JS API V3 -->
+		<script src="https://maps.googleapis.com/maps/api/js"></script>
+		
+		<!-- Our Bus Map library -->
 		<script src="../joensuu-busmap.js"></script>
 
-		<script>
-			var joensuuBusMap;
-			var allLines = [];
-			var busLineList;
-
-			$(document).ready(function() {
-				initializeMap();
-			
-				busLineList = $('#busline-list');
-				
-				$.getJSON("../lines.php", function(lines) {
-					allLines = lines;
-
-					// Generate and style route checkboxes
-					var routesHtml = "";
-					$.each(lines, function(i, line) {
-						routesHtml += '<h4>' + line.name + '</h4>';
-						$.each(line.routes, function(j, route) {
-							routesHtml += '<p><label><input type="checkbox" data-route-name="' + route.name + '" data-route-id="' + route.id + '">' + route.name + '</label><p>';
-						});
-						routesHtml += '<hr>';
-					});
-					busLineList.html(routesHtml);
-					busLineList.find('input').iCheck({checkboxClass: "icheckbox_flat"}).on('ifToggled', function() {
-						showCheckedLines();
-					});
-					
-					$('#markers-toggle').iCheck({checkboxClass: "icheckbox_flat"}).on('ifToggled', function() {
-						var isChecked = $(this).prop('checked');
-						joensuuBusMap.markers(isChecked);
-					});
-				});
-			});
-			
-			function initializeMap() {
-				var mapOptions = {
-					center: new google.maps.LatLng(62.6023831, 29.7922233),
-					zoom: 12
-				};
-				var gmap = new google.maps.Map(document.getElementById("map"), mapOptions);
-				joensuuBusMap = new JoensuuBusMap(gmap, {
-					showMarkers: false, 
-					markerIcon: "img/marker.png", 
-					apiEndPoint: "../routeStops.php"
-				});
-			}
-			
-			function showCheckedLines() {
-				var enabledRoutes = [];
-				var checkBoxes = busLineList.find('input:checked').each(function() {
-					enabledRoutes.push({id: $(this).data('route-id'), name: $(this).data('route-name')});
-				});
-				joensuuBusMap.drawRoutes(enabledRoutes);
-			}
-		</script>
+		<!-- Demo page JS -->
+		<script src="js/busmap-demo.js"></script>
 	</body>
 </html>
