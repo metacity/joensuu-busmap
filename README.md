@@ -213,7 +213,7 @@ var joensuuBusMap = new JoensuuBusMap(googleMap, {
 `JoensuuBusMap` objects have two additional methods to control the map after its instantiation: 
 
 | Method             | Return  | Description                              |
-| ------------------ | --------| ---------------------------------------- |
+| ------------------ | ------- | ---------------------------------------- |
 | `clear`            | Nothing | Clears all routes and markers on the map | 
 | `markers(boolean)` | Nothing | Enables or disables route stop markers   |
 
