@@ -147,11 +147,12 @@ An example response to an HTTP GET request to `http://server.com/routeStops.php?
 
 ## JavaScript library
 
-A small JS helper library is also provided. Is has no external dependencies, other than Google Maps JavaScript API V3. Its usage is super-easy:
+A small JS helper library is also provided. It depends jQuery and Google Maps JavaScript API V3 and. Its usage is super-easy:
 
-* Import Google Maps JavaScript API V3 and the JS helper library by adding the following just before the closing `</body>` tag: 
+* Import jQuery (2.x should work too), Google Maps JavaScript API V3 and the JS helper library by adding the following just before the closing `</body>` tag: 
 
     ```html
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
     <script src="path/to/joensuu-busmap.js"></script>
     ```
