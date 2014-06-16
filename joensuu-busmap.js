@@ -32,14 +32,11 @@ JoensuuBusMap.prototype.drawRoutes = function(routes) {
 	self.clear();
 	
 	// Fetch route waypoints for each given route
-	var i;
-	for (i = 0; i < routes.length; ++i) {
-		(function(idx) {
-			$.getJSON(self.settings.apiEndPoint + "?route_id=" + routes[idx].id, function(wayPoints) {
-				generatePolylineAndMarkers(wayPoints,  routes[idx]);
-			});
-		})(i);
-	}
+	$.each(routes, function(i, route) {
+		$.getJSON(self.settings.apiEndPoint + "?route_id=" + route.id, function(wayPoints) {
+			generatePolylineAndMarkers(wayPoints,  route);
+		});
+	});
 	
 	// Iterates over the waypoints and generates arrays of google.maps.LatLng
 	// and google.maps.Marker (if enabled) objects, stores them with the
@@ -48,9 +45,7 @@ JoensuuBusMap.prototype.drawRoutes = function(routes) {
 		var coordinates = [];
 		var markers = [];
 
-		var i;
-		for (i = 0; i < wayPoints.length; ++i) {
-			var wayPoint =  wayPoints[i];
+		$.each(wayPoints, function(i, wayPoint) {
 			var latLng = new google.maps.LatLng(wayPoint.lat, wayPoint.lon);
 			coordinates.push(latLng);
 
@@ -63,7 +58,7 @@ JoensuuBusMap.prototype.drawRoutes = function(routes) {
 				marker.setMap(self.map);
 			}
 			markers.push(marker);
-		}
+		});
 		
 		var polyline = new google.maps.Polyline({
 			path: coordinates,
@@ -98,32 +93,30 @@ JoensuuBusMap.prototype.drawRoutes = function(routes) {
 };
 
 JoensuuBusMap.prototype.clear = function() {
-	var routeId;
-	
 	// Clear markers
-	for (routeId in this.routeMarkers) {
-		for (var i = 0; i < this.routeMarkers[routeId].length; ++i) {
-			this.routeMarkers[routeId][i].setMap(null);
-		}
-	}
+	$.each(this.routeMarkers, function(routeId, markers) {
+		$.each(markers, function(i, marker) {
+			marker.setMap(null);
+		});
+	});
 	this.routeMarkers = {};
 	
 	// Clear polylines
-	for (routeId in this.routePolylines) {
-		this.routePolylines[routeId].setMap(null);
-	}
+	$.each(this.routePolylines, function(routeId, polyline) {
+		polyline.setMap(null);
+	});
 	this.routePolylines = {};
 };
 
 JoensuuBusMap.prototype.markers = function(enabled) {
-	this.settings.showMarkers = (enabled === true ? true : false);
+	var self = this;
+	self.settings.showMarkers = (enabled === true ? true : false);
 
-	var routeId;
-	for (routeId in this.routeMarkers) {
-		for (var i = 0; i < this.routeMarkers[routeId].length; ++i) {
-			this.routeMarkers[routeId][i].setMap(this.settings.showMarkers === true ? this.map : null);
-		}
-	}
+	$.each(this.routeMarkers, function(routeId, markers) {
+		$.each(markers, function(i, marker) {
+			marker.setMap(enabled === true ? self.map : null);
+		});
+	});
 };
 
 
